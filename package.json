@@ -1,0 +1,25 @@
+{
+  "name": "rorank",
+  "version": "1.0.0",
+  "description": "Roblox Ranking Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.0.6",
+    "axios": "^1.5.0",
+    "better-sqlite3": "^8.5.2",
+    "body-parser": "^1.20.2",
+    "chalk": "^4.1.2",
+    "cli-progress": "^3.12.0",
+    "express": "^4.18.2",
+    "ms": "^2.1.3",
+    "noblox.js": "^4.14.1",
+    "puppeteer-core": "^21.1.0",
+    "quick.db": "^9.1.7"
+  }
+}

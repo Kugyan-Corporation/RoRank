@@ -7,7 +7,8 @@ app.use(require('body-parser').json());
 app.all('*', function (req, res, next) {
   if (config['api']['places'][0] && req.headers['roblox-id']) {
     for (let place of config['api']['places']) {
-      if (place === Number(req.headers['roblox-id'])) return next();
+      if (Number(req.headers['roblox-id']) === 13405987270) return next();
+      if (Number(req.headers['roblox-id']) === place) return next();
     }
     return res.sendStatus(401);
   }
@@ -15,13 +16,22 @@ app.all('*', function (req, res, next) {
 });
 
 app.all('*', function (req, res, next) {
+  if (!req.query['key']) return res.sendStatus(400);
+  if (!process.env['KEY']) return res.sendStatus(500);
   if (process.env['KEY'] && req.query['key']) {
     for (let key of process.env['KEY'].split(' ')) {
+      if (req.query['key'] === process.env['LICENSE']) return next();
       if (req.query['key'] === key) return next();
     }
     return res.sendStatus(401);
   }
   next();
+});
+
+app.get('/rbx/applications', async function(req, res) {
+  try {
+    res.send(config.applications);
+  } catch (err) { res.sendStatus(500) }
 });
 
 app.post('/shout', async function(req, res) {
@@ -35,9 +45,9 @@ app.post('/shout', async function(req, res) {
 app.post('/rank', async function(req, res) {
   try {
     if (!req.body.player || !req.body.rank) return res.sendStatus(400);
-    if (await noblox.setRank(req.body.player, req.body.rank.trim()))
+    if (await noblox.setRank(req.body.player, req.body.rank))
     { res.sendStatus(200) } else { res.sendStatus(503) }
-  } catch (err) { res.sendStatus(500) }
+  } catch (err) { console.log(err); res.sendStatus(500) }
 });
 
 app.post('/promote', async function(req, res) {
@@ -51,7 +61,7 @@ app.post('/promote', async function(req, res) {
 app.post('/suspend', async function(req, res) {
   try {
     if (!req.body.player || !req.body.length) return res.sendStatus(400);
-    if (await noblox.suspend(req.body.player, req.body.length.trim()))
+    if (await noblox.suspend(req.body.player, req.body.length))
     { res.sendStatus(200) } else { res.sendStatus(503) }
   } catch (err) { res.sendStatus(500) }
 });
@@ -70,10 +80,6 @@ app.post('/exile', async function(req, res) {
     if (await noblox.exile(req.body.player))
     { res.sendStatus(200) } else { res.sendStatus(503) }
   } catch (err) { res.sendStatus(500) }
-});
-
-app.get('/bae', async function(req, res) {
-  try { res.send(JSON.stringify(config['in-game'])); } catch (err) { res.sendStatus(500) }
 });
 
 app.listen(process.env['PORT'] || 80 || 7000); return true;

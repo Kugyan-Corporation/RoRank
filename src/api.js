@@ -34,6 +34,12 @@ app.get('/rbx/applications', async function(req, res) {
   } catch (err) { res.sendStatus(500) }
 });
 
+app.get('/rbx/ranks', async function(req, res) {
+  try {
+    res.send(config.ranks);
+  } catch (err) { res.sendStatus(500) }
+});
+
 app.post('/shout', async function(req, res) {
   try {
     if (!req.body.text) return res.sendStatus(400);

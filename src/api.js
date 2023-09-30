@@ -1,8 +1,15 @@
 module.exports = async function(config, db, noblox) {
 const express = require('express');
 const app = express();
-app.use(require('body-parser').urlencoded({ extended: false }));
-app.use(require('body-parser').json());
+function rawBody(req, res, buf, encoding) {
+  req.rawBody = buf;
+}
+app.use(require('body-parser').json({
+    verify: rawBody
+}));
+app.use(require('body-parser').urlencoded({
+    extended: true
+}));
 
 app.all('*', function (req, res, next) {
   if (config['api']['places'][0] && req.headers['roblox-id']) {
@@ -26,18 +33,6 @@ app.all('*', function (req, res, next) {
     return res.sendStatus(401);
   }
   next();
-});
-
-app.get('/rbx/applications', async function(req, res) {
-  try {
-    res.send(config.applications);
-  } catch (err) { res.sendStatus(500) }
-});
-
-app.get('/rbx/ranks', async function(req, res) {
-  try {
-    res.send(config.ranks);
-  } catch (err) { res.sendStatus(500) }
 });
 
 app.post('/shout', async function(req, res) {
@@ -88,5 +83,7 @@ app.post('/exile', async function(req, res) {
   } catch (err) { res.sendStatus(500) }
 });
 
+app.use('/__/rbx', await require('./internal/rbx')(config, db, noblox, express.Router()));
+if(process.env['DISCORD_PUBLIC_KEY']&&process.env['DISCORD_APPLICATION_ID']&&process.env['DISCORD_TOKEN']&&config.discord){app.use('/__/discord', await require('./internal/discord')(config, db, noblox, express.Router()));}
 app.listen(process.env['PORT'] || 80 || 7000); return true;
 }

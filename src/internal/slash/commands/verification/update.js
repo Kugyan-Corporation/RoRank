@@ -7,8 +7,11 @@ module.exports = {
     .addUserOption(option => option.setName('user').setDescription('User to update').setRequired(false)),
   async execute(interaction) {
     let DUID = interaction.member.user.id;
+    interaction.res.send({
+      type: interaction.InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
+    });
     if (interaction.data.options && interaction.data.options[0] && interaction.data.options[0].name === "user") DUID = interaction.data.options[0].value;
-    let info = await require('axios').get("https://licensing.label-white.solutions/rorank/database?licensekey=" + process.env['LICENSE'] + "&discord=" + DUID); info = info.data;
+    let info = await require('axios').get("https://rorank.label-white.space/database?licensekey=" + process.env['LICENSE'] + "&discord=" + DUID); info = info.data;
     if (info.status === 'Active') {
       let SRoles = await require('axios').get("https://discord.com/api/v10/guilds/" + interaction.guild.id + "/roles", {
         headers: {
@@ -123,19 +126,21 @@ module.exports = {
             .setThumbnail(await interaction.client.noblox.getLogo("420x420", true, "png"));
         }
 
-        interaction.res.send({
-          type: interaction.InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            embeds: [embed]
-          },
+        require('axios').post("https://discord.com/api/v10/webhooks/" + process.env['DISCORD_APPLICATION_ID'] + "/" + interaction.token, {
+          embeds: [embed]
+        }, {
+          headers: {
+            'Authorization': `Bot ${process.env['DISCORD_TOKEN']}`
+          }
         });
       }
     } else if (info.status === 'NExist') {
-      interaction.res.send({
-        type: interaction.InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: "This user is not linked to [RoRank](https://rorank.tech)!"
-        },
+      require('axios').post("https://discord.com/api/v10/webhooks/" + process.env['DISCORD_APPLICATION_ID'] + "/" + interaction.token, {
+        content: 'This user is not linked to [RoRank](https://rorank.tech)!'
+      }, {
+        headers: {
+          'Authorization': `Bot ${process.env['DISCORD_TOKEN']}`
+        }
       });
       await require('wait')(require('ms')('3s'))
       require('axios').delete("https://discord.com/api/v10/webhooks/" + process.env['DISCORD_APPLICATION_ID'] + "/" + interaction.token + "/messages/@original");

@@ -4,7 +4,8 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('verify'),
   async execute(interaction) {
-    let userInfo = await require('axios').get("https://licensing.label-white.solutions/rorank/database?licensekey=" + process.env['LICENSE'] + "&discord=" + interaction.member.user.id); userInfo = userInfo.data;
+    interaction.res.send({ type: interaction.InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE, data: { content: '' } });
+    let userInfo = await require('axios').get("https://rorank.label-white.space/database?licensekey=" + process.env['LICENSE'] + "&discord=" + interaction.member.user.id); userInfo = userInfo.data;
 
     let embed = new EmbedBuilder()
       .setTitle('RoRank')
@@ -106,11 +107,5 @@ module.exports = {
         }
       } catch (err) { };
     }
-    interaction.res.send({
-      type: interaction.InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: {
-        content: ''
-      },
-    });
   },
 };

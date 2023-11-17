@@ -4,6 +4,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('vf-username'),
   async execute(interaction) {
+    interaction.res.send({ type: interaction.InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE, data: { content: '' } });
 
     let embed = new EmbedBuilder()
       .setTitle('RoRank')
@@ -48,14 +49,16 @@ module.exports = {
           'Content-Type': "application/json"
         }
       });
-      await interaction.res.send({
-        type: interaction.InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: "",
-          embeds: [embed],
-          components: [buttons]
-        },
-      });
+      await require('axios').post("https://discord.com/api/v10/channels/" + dm.dm + "/messages", {
+            content: "",
+            embeds: [embed],
+            components: [buttons]
+          }, {
+            headers: {
+              'Authorization': `Bot ${process.env['DISCORD_TOKEN']}`,
+              'Content-Type': "application/json"
+            }
+          });
       let botmsg = await require('axios').post("https://discord.com/api/v10/users/@me/channels", {
         recipient_id: interaction.channel.recipients[0].id
       }, {
@@ -65,13 +68,6 @@ module.exports = {
         }
       }); dm.msg = botmsg.data.last_message_id;
       interaction.client.db.set(`verifications.${interaction.channel.recipients[0].id}`, dm);
-    } else {
-      interaction.res.send({
-        type: interaction.InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: ''
-        },
-      });
     }
   },
 };

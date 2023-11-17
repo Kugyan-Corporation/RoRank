@@ -4,6 +4,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('vf-code'),
   async execute(interaction) {
+    interaction.res.send({ type: interaction.InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE, data: { content: '' } });
 
     let embed = new EmbedBuilder()
       .setTitle('RoRank')
@@ -20,7 +21,7 @@ module.exports = {
     let dm = await interaction.client.db.get(`verifications.${interaction.channel.recipients[0].id}`) || {};
 
     if (dm.msg) {
-      let database = await require('axios').put("https://licensing.label-white.solutions/rorank/database", {
+      let database = await require('axios').put("https://rorank.label-white.space/database", {
         id: dm.user,
         type: "code",
         discord: interaction.channel.recipients[0].id,

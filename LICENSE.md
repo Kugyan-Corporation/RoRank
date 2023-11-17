@@ -24,5 +24,3 @@ This software, referred to as "RoRank," is proprietary software and is protected
 By using RoRank, you agree to abide by the terms and conditions of this license. Any violation of this license may result in legal action.
 
 For licensing inquiries or to purchase a license, please visit [Label-White](https://my.label-white.shop/store/rorank).
-
-Please note that users should be made aware of the terms, especially the part about not modifying the source code to maintain their eligibility for support.

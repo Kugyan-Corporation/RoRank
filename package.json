@@ -1,6 +1,6 @@
 {
   "name": "rorank",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "A Roblox Ranking Service that has Applications/Rank Centers.",
   "main": "index.js",
   "keywords": ["roblox", "ranking", "leaderboards", "easyranks", "rank", "roblox-development", "gamedev", "roblox-api", "game-leaderboards", "game-ranking", "roblox-sdk", "rank-centers", "app-centers"],

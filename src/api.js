@@ -85,5 +85,5 @@ app.post('/exile', async function(req, res) {
 
 app.use('/__/rbx', await require('./internal/rbx')(config, db, noblox, express.Router()));
 if(process.env['DISCORD_PUBLIC_KEY']&&process.env['DISCORD_APPLICATION_ID']&&process.env['DISCORD_TOKEN']&&config.discord){app.use('/__/discord', await require('./internal/discord')(config, db, noblox, express.Router()));}
-app.listen(process.env['PORT'] || 80 || 7000); return true;
+app.listen(process.env['SERVER_PORT'] || process.env['PORT'] || 80 || 3000); return true;
 }

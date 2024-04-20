@@ -6,6 +6,7 @@
   "keywords": ["roblox", "ranking", "leaderboards", "easyranks", "rank", "roblox-development", "gamedev", "roblox-api", "game-leaderboards", "game-ranking", "roblox-sdk", "rank-centers", "app-centers"],
   "author": "Kugyan Corporation",
   "license": "Custom Proprietary License",
+  "homepage": "https://rorank.tech",
   "dependencies": {
     "@types/node": "^18.0.6",
     "axios": "^1.5.0",
